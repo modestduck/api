@@ -38,7 +38,7 @@ jobs:
     - name: sam deploy
       uses: falnyr/aws-sam-deploy-action@v1.2.1
       env:
-        TEMPLATE: 'template.yaml'
+        TEMPLATE: 'template.yml'
         AWS_STACK_NAME: resume
         AWS_REGION: 'us-west-2'
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
