@@ -6,5 +6,5 @@ stack_name = "reactions"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-15sa10cjhp6n9"
 s3_prefix = "reactions"
 region = "us-west-2"
-confirm_changeset = true
+confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
