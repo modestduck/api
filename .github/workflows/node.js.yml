@@ -36,10 +36,11 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-west-2
     - name: sam deploy
-      uses: TractorZoom/sam-cli-action@master
-      with:
-        sam_command: "deploy"
+      uses: falnyr/aws-sam-deploy-action@v1.2.1
       env:
+        TEMPLATE: 'template.yaml'
+        AWS_STACK_NAME: resume
+        AWS_REGION: 'us-west-2'
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-west-2
+        AWS_DEPLOY_BUCKET: ${{ secrets.AWS_DEPLOY_BUCKET }}
