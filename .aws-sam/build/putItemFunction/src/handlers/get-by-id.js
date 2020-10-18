@@ -6,6 +6,7 @@ const tableName = process.env.SAMPLE_TABLE;
 // Create a DocumentClient that represents the query to add an item
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
+const html = require('../util/html-util');
 
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
@@ -29,17 +30,6 @@ exports.getByIdHandler = async (event) => {
   const data = await docClient.get(params).promise();
   const item = data.Item;
  
-  const response = {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Headers" : "Content-Type",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET"
-    },
-    body: JSON.stringify(item)
-  };
- 
-  // All log statements are written to CloudWatch
-  console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
-  return response;
+  console.info(`response from: ${event.path} statusCode: ${200} body: ${item}`);
+  return html.respond(200, item);
 }

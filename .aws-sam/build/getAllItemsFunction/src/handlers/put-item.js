@@ -4,6 +4,7 @@
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 const emoji = require("emoji-dictionary");
+const html = require('../util/html-util');
 
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.SAMPLE_TABLE;
@@ -21,15 +22,7 @@ exports.putItemHandler = async (event) => {
     const body = JSON.parse(event.body)
     const id = body.id;
     if (!emoji.names.includes(id)) {
-        return {
-            statusCode: 422,
-            headers: {
-                "Access-Control-Allow-Headers" : "Content-Type",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-            },
-            body: JSON.stringify(result)
-        }
+        return html.respond(html.Code.REJECT, "bad emoji code")
     }
     // Creates a new item, or replaces an old item with a new item
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
@@ -50,17 +43,5 @@ exports.putItemHandler = async (event) => {
 
     const result = await docClient.update(params).promise();
 
-    const response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-        },
-        body: JSON.stringify(result)
-    };
-
-    // All log statements are written to CloudWatch
-    console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
-    return response;
+    return html.respond(html.Code.OK, result);
 }

@@ -2,7 +2,7 @@
 const lambda = require('../../../src/handlers/get-all-items.js'); 
 // Import dynamodb from aws-sdk 
 const dynamodb = require('aws-sdk/clients/dynamodb'); 
- 
+ const html = require('../../../src/util/html-util')
 // This includes all tests for getAllItemsHandler() 
 describe('Test getAllItemsHandler', () => { 
     let scanSpy; 
@@ -19,7 +19,7 @@ describe('Test getAllItemsHandler', () => {
         scanSpy.mockRestore(); 
     }); 
  
-    it('should return ids', async () => { 
+    it('deals with cors', async () => { 
         const items = [{ id: 'id1' }, { id: 'id2' }]; 
  
         // Return the specified value whenever the spied scan function is called 
@@ -34,12 +34,8 @@ describe('Test getAllItemsHandler', () => {
         // Invoke helloFromLambdaHandler() 
         const result = await lambda.getAllItemsHandler(event); 
  
-        const expectedResult = { 
-            statusCode: 200, 
-            body: JSON.stringify(items) 
-        }; 
- 
+        const expectedResult = html.respond(200, items); 
         // Compare the result with the expected result 
-        expect(result).toEqual(expectedResult); 
+        expect(result.headers).toEqual(expectedResult.headers); 
     }); 
 }); 

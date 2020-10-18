@@ -3,6 +3,8 @@ const lambda = require('../../../src/handlers/get-by-id.js');
 // Import dynamodb from aws-sdk 
 const dynamodb = require('aws-sdk/clients/dynamodb'); 
  
+const html = require('../../../src/util/html-util');
+
 // This includes all tests for getByIdHandler() 
 describe('Test getByIdHandler', () => { 
     let getSpy; 
@@ -20,7 +22,7 @@ describe('Test getByIdHandler', () => {
     }); 
  
     // This test invokes getByIdHandler() and compare the result  
-    it('should get item by id', async () => { 
+    it('deals with cors', async () => { 
         const item = { id: 'id1' }; 
  
         // Return the specified value whenever the spied get function is called 
@@ -38,13 +40,10 @@ describe('Test getByIdHandler', () => {
         // Invoke getByIdHandler() 
         const result = await lambda.getByIdHandler(event); 
  
-        const expectedResult = { 
-            statusCode: 200, 
-            body: JSON.stringify(item) 
-        }; 
+        const expectedResult = html.respond(200, item)
  
         // Compare the result with the expected result 
-        expect(result).toEqual(expectedResult); 
+        expect(result.headers).toEqual(expectedResult.headers); 
     }); 
 }); 
  

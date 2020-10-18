@@ -7,6 +7,8 @@ const tableName = process.env.SAMPLE_TABLE;
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
+const html = require('../util/html-util');
+
 /**
  * A simple example includes a HTTP get method to get all items from a DynamoDB table.
  */
@@ -26,17 +28,7 @@ exports.getAllItemsHandler = async (event) => {
     const data = await docClient.scan(params).promise();
     const items = data.Items;
 
-    const response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Headers" : "Content-Type",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET"
-        },
-        body: JSON.stringify(items)
-    };
-
     // All log statements are written to CloudWatch
-    console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
-    return response;
+    console.info(`response from: ${event.path} statusCode: ${200} body: ${items}`);
+    return html.respond(200, items);
 }

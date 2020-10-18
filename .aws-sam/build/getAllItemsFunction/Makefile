@@ -6,3 +6,6 @@ run:
 
 deploy:
 	sam deploy
+
+test:
+	npm test

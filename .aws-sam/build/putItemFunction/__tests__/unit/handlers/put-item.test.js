@@ -3,6 +3,7 @@ const lambda = require('../../../src/handlers/put-item.js');
 // Import dynamodb from aws-sdk 
 const dynamodb = require('aws-sdk/clients/dynamodb'); 
  
+const html = require('../../../src/util/html-util');
 // This includes all tests for putItemHandler() 
 describe('Test putItemHandler', function () { 
     let putSpy; 
@@ -20,7 +21,7 @@ describe('Test putItemHandler', function () {
     }); 
  
     // This test invokes putItemHandler() and compare the result  
-    it('should add id to the table', async () => { 
+    it('deals with cors', async () => { 
         const returnedItem = { id: 'id1', name: 'name1' }; 
  
         // Return the specified value whenever the spied put function is called 
@@ -35,13 +36,10 @@ describe('Test putItemHandler', function () {
      
         // Invoke putItemHandler() 
         const result = await lambda.putItemHandler(event); 
-        const expectedResult = { 
-            statusCode: 200, 
-            body: JSON.stringify(returnedItem) 
-        }; 
- 
+        const expectedResult = html.respond(200, returnedItem)
+
         // Compare the result with the expected result 
-        expect(result).toEqual(expectedResult); 
+        expect(result.headers).toEqual(expectedResult.headers); 
     }); 
 }); 
  
